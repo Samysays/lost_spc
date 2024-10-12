@@ -15,3 +15,14 @@ scipy = "^1.14.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.flake8]
+max-line-length = 100
+exclude = [".git", "__pycache__"]
+extend-ignore = ["E203"]
+
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
