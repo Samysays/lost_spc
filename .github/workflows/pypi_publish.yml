@@ -3,9 +3,7 @@ name: Publish to PyPI
 on:
   push:
     branches:
-      - main # Change this to your default branch if necessary
-    paths:
-      - "pyproject.toml" # Only trigger when pyproject.toml is changed
+      - main
 
 jobs:
   publish:
@@ -27,22 +25,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Check for version change
-        id: version-check
-        run: |
-          current_version=$(poetry version -s)
-          git fetch origin main
-          previous_version=$(git show origin/main:pyproject.toml | grep version | sed 's/.*= "\(.*\)"/\1/')
-          if [ "$current_version" == "$previous_version" ]; then
-            echo "Version has not changed."
-            echo "::set-output name=publish::false"
-          else
-            echo "Version has changed from $previous_version to $current_version."
-            echo "::set-output name=publish::true"
-          fi
-
       - name: Build and Publish
-        if: steps.version-check.outputs.publish == 'true'
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
